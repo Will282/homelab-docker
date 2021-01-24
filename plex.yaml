@@ -4,7 +4,7 @@ services:
     container_name: plex
     image: plexinc/pms-docker
     restart: unless-stopped
-    ports:
+    ports: # Required plex ports
       - 32400:32400/tcp
       - 3005:3005/tcp
       - 8324:8324/tcp
@@ -14,16 +14,15 @@ services:
       - 32412:32412/udp
       - 32413:32413/udp
       - 32414:32414/udp
-    environment:
+    environment: # Set environment variables
       - PLEX_UID=${PUID}
       - PLEX_GID=${PGID}
       - TZ=${TZ}
       - PLEX_CLAIM=${PLEX_CLAIM}
-      - ADVERTISE_IP=http://${PLEX_HOSTNAME}:32400/
-    hostname: ${PLEX_HOSTNAME}
+      - ADVERTISE_IP=http://${HOST}:32400/
     volumes:
       - ${DOCKER_VOLS}/plex/config:/config
       - ${TEMP_DOCKER_VOLS}/plex/temp:/transcode
       - ${MEDIA}:/data
     devices:
-      - "/dev/dri:/dev/dri"
+      - "/dev/dri:/dev/dri" # For HW transcoding
